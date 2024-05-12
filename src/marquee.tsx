@@ -100,9 +100,11 @@ const MarqueeInternal = React.memo(
         filteredChildren.length === 1
           ? childrenCount.current
           : childrenCount.current - 1;
+
       placeholders.current = placeholders.current.filter((item, index) => {
         return index < indexFilter;
       });
+      console.log('indexFilter', indexFilter, placeholders.current);
       nextChildIndex.current = placeholders.current.length;
       const createPlaceholders = (sizeToFill: number) => {
         // we may have some placeholders queued, and if that's the case
