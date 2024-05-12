@@ -442,10 +442,9 @@ debug@^4.1.0, debug@^4.3.1:
   dependencies:
     ms "2.1.2"
 
-dynamic-marquee-react@^1.0.0:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/dynamic-marquee-react/-/dynamic-marquee-react-1.0.2.tgz#62b594dc73fe6098da8d5466bf0445fe3f1723ba"
-  integrity sha512-El6BFquU37TuCDHfjstMdMlv4w/2Q4pPYe/1a3CpaIc2MM8SZ0GmDyeepO5WearA/jZO1Vej4qIuPFqCXi0ehA==
+"dynamic-marquee-react@https://github.com/truongnc1/dynamic-marquee-react.git":
+  version "1.0.3"
+  resolved "https://github.com/truongnc1/dynamic-marquee-react.git#6313987366a799c10e6cffb8df813ceaec413e33"
 
 electron-to-chromium@^1.4.668:
   version "1.4.763"

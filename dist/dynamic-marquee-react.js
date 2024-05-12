@@ -1044,7 +1044,7 @@
             placeholders.current = placeholders.current.filter(function (item, index) {
                 return index < indexFilter;
             });
-            console.log('indexFilter', indexFilter, placeholders.current);
+            console.log('indexFilter1111122', indexFilter, placeholders.current);
             nextChildIndex.current = placeholders.current.length;
             var createPlaceholders = function (sizeToFill) {
                 // we may have some placeholders queued, and if that's the case

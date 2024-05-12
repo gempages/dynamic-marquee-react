@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Marquee } from '../../src/marquee';
+import { Marquee } from 'dynamic-marquee-react';
 
 import './style.css';
 
@@ -20,9 +20,7 @@ export default function App() {
       </div>
       <Marquee rate={0} startOnScreen>
         {counter.map((item, index) => (
-          <div key={index} style={{ width: '100px' }}>
-            {index}
-          </div>
+          <div key={index}>{index}</div>
         ))}
       </Marquee>
     </div>
