@@ -11,7 +11,9 @@ export default function App() {
       <div onClick={() => setCounter((pre) => pre.concat(1))}>Click</div>
       <div
         onClick={() =>
-          setCounter((pre) => pre.filter((_, index) => index !== 3))
+          setCounter((pre) =>
+            pre.filter((_, index) => index !== pre.length - 1),
+          )
         }
       >
         Click

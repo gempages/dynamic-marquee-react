@@ -1035,8 +1035,11 @@ var MarqueeInternal = React.memo(function (_a) {
         if (!marqueeInstance)
             return;
         // marqueeInstance.clear();
+        var indexFilter = filteredChildren.length === 1
+            ? childrenCount.current
+            : childrenCount.current - 1;
         placeholders.current = placeholders.current.filter(function (item, index) {
-            return index < childrenCount.current - 1;
+            return index < indexFilter;
         });
         nextChildIndex.current = placeholders.current.length;
         var createPlaceholders = function (sizeToFill) {

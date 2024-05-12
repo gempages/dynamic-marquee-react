@@ -96,9 +96,12 @@ const MarqueeInternal = React.memo(
     useEffect(() => {
       if (!marqueeInstance) return;
       // marqueeInstance.clear();
-
+      const indexFilter =
+        filteredChildren.length === 1
+          ? childrenCount.current
+          : childrenCount.current - 1;
       placeholders.current = placeholders.current.filter((item, index) => {
-        return index < childrenCount.current - 1;
+        return index < indexFilter;
       });
       nextChildIndex.current = placeholders.current.length;
       const createPlaceholders = (sizeToFill: number) => {
