@@ -17,18 +17,19 @@ export function WatchSize({
 
   useLayoutEffect(() => {
     if (!$container) return;
-
     const { getSize, onSizeChange, stopWatching } =
       marqueeInstance.watchItemSize($container);
 
     const send = () => currentOnChange.current(getSize());
 
-    onSizeChange(() => send());
+    onSizeChange(() => {
+      send();
+    });
 
     send();
 
     return () => stopWatching();
   }, [$container, marqueeInstance]);
 
-  return createPortal(children, $container);
+  return createPortal(children, $container) as JSX.Element;
 }
