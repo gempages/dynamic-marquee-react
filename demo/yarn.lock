@@ -444,7 +444,7 @@ debug@^4.1.0, debug@^4.3.1:
 
 "dynamic-marquee-react@https://github.com/truongnc1/dynamic-marquee-react.git":
   version "1.0.3"
-  resolved "https://github.com/truongnc1/dynamic-marquee-react.git#6313987366a799c10e6cffb8df813ceaec413e33"
+  resolved "https://github.com/truongnc1/dynamic-marquee-react.git#0fe2f6ed9d3837cee9e87237a88db1c4c9dffed7"
 
 electron-to-chromium@^1.4.668:
   version "1.4.763"

@@ -996,17 +996,19 @@
             return React.createElement("div", null);
         return (React.createElement(MarqueeInternal, __assign({}, marqueeOpts, { filteredChildren: filteredChildren })));
     }
+    var started = false;
     var MarqueeInternal = React.memo(function (_a) {
         var filteredChildren = _a.filteredChildren, rate = _a.rate, upDown = _a.upDown, startOnScreen = _a.startOnScreen;
         var rateInitial = React.useState(rate)[0];
         var startOnScreenInitial = React.useState(startOnScreen)[0];
         var upDownInitial = React.useState(upDown)[0];
+        var _b = React.useState({}), changeSize = _b[0], setTriggerChangeSize = _b[1];
         var idGenerator = React.useState(IdGenerator())[0];
-        var _b = React.useState(null), setRenderTrigger = _b[1];
-        var _c = React.useState(null), $container = _c[0], setContainer = _c[1];
+        var _c = React.useState(null), setRenderTrigger = _c[1];
+        var _d = React.useState(null), $container = _d[0], setContainer = _d[1];
         var placeholders = React.useRef([]);
         var nextChildIndex = React.useRef(0);
-        var _d = React.useState(null), marqueeInstance = _d[0], setMarqueeInstance = _d[1];
+        var _e = React.useState(null), marqueeInstance = _e[0], setMarqueeInstance = _e[1];
         var nextItemTouching = React.useRef(false);
         var itemSizes = React.useRef([]);
         var childrenCount = React.useRef(filteredChildren.length);
@@ -1044,7 +1046,6 @@
             placeholders.current = placeholders.current.filter(function (item, index) {
                 return index < indexFilter;
             });
-            console.log('indexFilter1111122', indexFilter, placeholders.current);
             nextChildIndex.current = placeholders.current.length;
             var createPlaceholders = function (sizeToFill) {
                 // we may have some placeholders queued, and if that's the case
@@ -1106,7 +1107,7 @@
             // Create the placeholder for the first item.
             // May actually be more than one item if the items are smaller than the buffer size.
             createPlaceholders(marqueeInstance.getGapSize());
-        }, [idGenerator, marqueeInstance, filteredChildren.length]);
+        }, [idGenerator, marqueeInstance, filteredChildren.length, changeSize]);
         React.useEffect(function () {
             if (!marqueeInstance || rate === undefined)
                 return;
@@ -1138,6 +1139,11 @@
                 });
             }
         });
+        React.useEffect(function () {
+            if (rate) {
+                started = true;
+            }
+        }, [rate]);
         return (React.createElement(React.Fragment, null,
             React.createElement("div", { ref: setContainer, style: { all: 'unset', display: 'block', height: '100%' } }),
             placeholders.current.map(function (placeholder) {
@@ -1148,6 +1154,11 @@
             }),
             marqueeInstance
                 ? filteredChildren.map(function (child, i) { return (React.createElement(WatchSize, { key: i, marqueeInstance: marqueeInstance, onChange: function (size) {
+                        if (started) {
+                            marqueeInstance.clear();
+                            placeholders.current = [];
+                            setTriggerChangeSize({});
+                        }
                         itemSizes.current[i] = size;
                     } }, child)); })
                 : null));

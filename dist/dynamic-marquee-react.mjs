@@ -993,17 +993,19 @@ function Marquee(_a) {
         return React.createElement("div", null);
     return (React.createElement(MarqueeInternal, __assign({}, marqueeOpts, { filteredChildren: filteredChildren })));
 }
+var started = false;
 var MarqueeInternal = React.memo(function (_a) {
     var filteredChildren = _a.filteredChildren, rate = _a.rate, upDown = _a.upDown, startOnScreen = _a.startOnScreen;
     var rateInitial = useState(rate)[0];
     var startOnScreenInitial = useState(startOnScreen)[0];
     var upDownInitial = useState(upDown)[0];
+    var _b = useState({}), changeSize = _b[0], setTriggerChangeSize = _b[1];
     var idGenerator = useState(IdGenerator())[0];
-    var _b = useState(null), setRenderTrigger = _b[1];
-    var _c = useState(null), $container = _c[0], setContainer = _c[1];
+    var _c = useState(null), setRenderTrigger = _c[1];
+    var _d = useState(null), $container = _d[0], setContainer = _d[1];
     var placeholders = useRef([]);
     var nextChildIndex = useRef(0);
-    var _d = useState(null), marqueeInstance = _d[0], setMarqueeInstance = _d[1];
+    var _e = useState(null), marqueeInstance = _e[0], setMarqueeInstance = _e[1];
     var nextItemTouching = useRef(false);
     var itemSizes = useRef([]);
     var childrenCount = useRef(filteredChildren.length);
@@ -1041,7 +1043,6 @@ var MarqueeInternal = React.memo(function (_a) {
         placeholders.current = placeholders.current.filter(function (item, index) {
             return index < indexFilter;
         });
-        console.log('indexFilter1111122', indexFilter, placeholders.current);
         nextChildIndex.current = placeholders.current.length;
         var createPlaceholders = function (sizeToFill) {
             // we may have some placeholders queued, and if that's the case
@@ -1103,7 +1104,7 @@ var MarqueeInternal = React.memo(function (_a) {
         // Create the placeholder for the first item.
         // May actually be more than one item if the items are smaller than the buffer size.
         createPlaceholders(marqueeInstance.getGapSize());
-    }, [idGenerator, marqueeInstance, filteredChildren.length]);
+    }, [idGenerator, marqueeInstance, filteredChildren.length, changeSize]);
     useEffect(function () {
         if (!marqueeInstance || rate === undefined)
             return;
@@ -1135,6 +1136,11 @@ var MarqueeInternal = React.memo(function (_a) {
             });
         }
     });
+    useEffect(function () {
+        if (rate) {
+            started = true;
+        }
+    }, [rate]);
     return (React.createElement(React.Fragment, null,
         React.createElement("div", { ref: setContainer, style: { all: 'unset', display: 'block', height: '100%' } }),
         placeholders.current.map(function (placeholder) {
@@ -1145,6 +1151,11 @@ var MarqueeInternal = React.memo(function (_a) {
         }),
         marqueeInstance
             ? filteredChildren.map(function (child, i) { return (React.createElement(WatchSize, { key: i, marqueeInstance: marqueeInstance, onChange: function (size) {
+                    if (started) {
+                        marqueeInstance.clear();
+                        placeholders.current = [];
+                        setTriggerChangeSize({});
+                    }
                     itemSizes.current[i] = size;
                 } }, child)); })
             : null));

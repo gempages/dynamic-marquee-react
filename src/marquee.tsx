@@ -43,7 +43,7 @@ type Placeholder = {
   inDom: boolean;
   appended: boolean;
 };
-
+let started = false;
 const MarqueeInternal = React.memo(
   ({
     filteredChildren,
@@ -54,10 +54,12 @@ const MarqueeInternal = React.memo(
     const [rateInitial] = useState(rate);
     const [startOnScreenInitial] = useState(startOnScreen);
     const [upDownInitial] = useState(upDown);
+    const [changeSize, setTriggerChangeSize] = useState({});
     const [idGenerator] = useState(IdGenerator());
     const [, setRenderTrigger] = useState<object | null>(null);
     const [$container, setContainer] = useState<HTMLDivElement | null>(null);
     const placeholders = useRef<Placeholder[]>([]);
+
     const nextChildIndex = useRef(0);
     const [marqueeInstance, setMarqueeInstance] = useState<MarqueeLib | null>(
       null,
@@ -96,6 +98,7 @@ const MarqueeInternal = React.memo(
     useEffect(() => {
       if (!marqueeInstance) return;
       // marqueeInstance.clear();
+
       const indexFilter =
         filteredChildren.length === 1
           ? childrenCount.current
@@ -104,7 +107,7 @@ const MarqueeInternal = React.memo(
       placeholders.current = placeholders.current.filter((item, index) => {
         return index < indexFilter;
       });
-      console.log('indexFilter1111122', indexFilter, placeholders.current);
+
       nextChildIndex.current = placeholders.current.length;
       const createPlaceholders = (sizeToFill: number) => {
         // we may have some placeholders queued, and if that's the case
@@ -145,7 +148,6 @@ const MarqueeInternal = React.memo(
           nextChildIndex.current =
             (nextChildIndex.current + 1) % childrenCount.current;
         }
-
         // Trigger a render.
         setRenderTrigger({});
       };
@@ -170,8 +172,9 @@ const MarqueeInternal = React.memo(
 
       // Create the placeholder for the first item.
       // May actually be more than one item if the items are smaller than the buffer size.
+
       createPlaceholders(marqueeInstance.getGapSize());
-    }, [idGenerator, marqueeInstance, filteredChildren.length]);
+    }, [idGenerator, marqueeInstance, filteredChildren.length, changeSize]);
 
     useEffect(() => {
       if (!marqueeInstance || rate === undefined) return;
@@ -205,6 +208,13 @@ const MarqueeInternal = React.memo(
         });
       }
     });
+
+    useEffect(() => {
+      if (rate) {
+        started = true;
+      }
+    }, [rate]);
+
     return (
       <React.Fragment>
         <div
@@ -225,6 +235,11 @@ const MarqueeInternal = React.memo(
                 key={i}
                 marqueeInstance={marqueeInstance}
                 onChange={(size) => {
+                  if (started) {
+                    marqueeInstance.clear();
+                    placeholders.current = [];
+                    setTriggerChangeSize({});
+                  }
                   itemSizes.current[i] = size;
                 }}
               >
