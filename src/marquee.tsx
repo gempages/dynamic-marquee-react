@@ -153,6 +153,8 @@ const MarqueeInternal = React.memo(
       };
 
       marqueeInstance.onItemRequired(({ touching }) => {
+        console.log('onItemRequired', touching);
+
         nextItemTouching.current = !!touching;
         createPlaceholders(marqueeInstance.getGapSize());
       });
@@ -235,11 +237,13 @@ const MarqueeInternal = React.memo(
                 key={i}
                 marqueeInstance={marqueeInstance}
                 onChange={(size) => {
-                  if (started) {
-                    marqueeInstance.clear();
-                    placeholders.current = [];
-                    setTriggerChangeSize({});
-                  }
+                  console.log('startedstarted', started, size);
+
+                  // if (started) {
+                  //   marqueeInstance.clear();
+                  //   placeholders.current = [];
+                  //   setTriggerChangeSize({});
+                  // }
                   itemSizes.current[i] = size;
                 }}
               >

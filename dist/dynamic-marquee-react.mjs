@@ -999,7 +999,7 @@ var MarqueeInternal = React.memo(function (_a) {
     var rateInitial = useState(rate)[0];
     var startOnScreenInitial = useState(startOnScreen)[0];
     var upDownInitial = useState(upDown)[0];
-    var _b = useState({}), changeSize = _b[0], setTriggerChangeSize = _b[1];
+    var _b = useState({}), changeSize = _b[0]; _b[1];
     var idGenerator = useState(IdGenerator())[0];
     var _c = useState(null), setRenderTrigger = _c[1];
     var _d = useState(null), $container = _d[0], setContainer = _d[1];
@@ -1087,6 +1087,7 @@ var MarqueeInternal = React.memo(function (_a) {
         };
         marqueeInstance.onItemRequired(function (_a) {
             var touching = _a.touching;
+            console.log('onItemRequired', touching);
             nextItemTouching.current = !!touching;
             createPlaceholders(marqueeInstance.getGapSize());
         });
@@ -1151,11 +1152,12 @@ var MarqueeInternal = React.memo(function (_a) {
         }),
         marqueeInstance
             ? filteredChildren.map(function (child, i) { return (React.createElement(WatchSize, { key: i, marqueeInstance: marqueeInstance, onChange: function (size) {
-                    if (started) {
-                        marqueeInstance.clear();
-                        placeholders.current = [];
-                        setTriggerChangeSize({});
-                    }
+                    console.log('startedstarted', started, size);
+                    // if (started) {
+                    //   marqueeInstance.clear();
+                    //   placeholders.current = [];
+                    //   setTriggerChangeSize({});
+                    // }
                     itemSizes.current[i] = size;
                 } }, child)); })
             : null));
