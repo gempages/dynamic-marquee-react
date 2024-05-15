@@ -548,10 +548,9 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-dynamic-marquee@2.6.3:
+"dynamic-marquee@git+https://github.com/truongnc1/dynamic-marquee.git":
   version "2.6.3"
-  resolved "https://registry.yarnpkg.com/dynamic-marquee/-/dynamic-marquee-2.6.3.tgz#e61f7c5b72a13bb6a863b765fb5d87365f790be4"
-  integrity sha512-5L51W1XexQDiP3ZjGuKUfXqOD2IrsygOuKSRBN7ezaDJnsssengzz+h9oBFtnvX54WEwdAzkhhXoh9pBwNhj+w==
+  resolved "git+https://github.com/truongnc1/dynamic-marquee.git#8df7c8635f10d1adff131d16455476035fc91a82"
 
 es-abstract@^1.22.1, es-abstract@^1.22.3, es-abstract@^1.23.0, es-abstract@^1.23.1, es-abstract@^1.23.2, es-abstract@^1.23.3:
   version "1.23.3"

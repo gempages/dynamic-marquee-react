@@ -1,3 +1,5 @@
+
+
 import { Marquee as MarqueeLib } from 'dynamic-marquee';
 import React, {
   ReactNode,
@@ -153,8 +155,6 @@ const MarqueeInternal = React.memo(
       };
 
       marqueeInstance.onItemRequired(({ touching }) => {
-        console.log('onItemRequired', touching);
-
         nextItemTouching.current = !!touching;
         createPlaceholders(marqueeInstance.getGapSize());
       });
@@ -216,7 +216,7 @@ const MarqueeInternal = React.memo(
         started = true;
       }
     }, [rate]);
-
+    
     return (
       <React.Fragment>
         <div
@@ -237,13 +237,7 @@ const MarqueeInternal = React.memo(
                 key={i}
                 marqueeInstance={marqueeInstance}
                 onChange={(size) => {
-                  console.log('startedstarted', started, size);
-
-                  // if (started) {
-                  //   marqueeInstance.clear();
-                  //   placeholders.current = [];
-                  //   setTriggerChangeSize({});
-                  // }
+               
                   itemSizes.current[i] = size;
                 }}
               >

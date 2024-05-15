@@ -6,7 +6,7 @@ import './style.css';
 export default function App() {
   const [counter, setCounter] = React.useState([1]);
   const [text, setText] = React.useState('truongcount');
-  const [width, setWidth] = React.useState(1200);
+  const [width, setWidth] = React.useState(2200);
   const [rate, setRate] = React.useState(0);
 
   return (
@@ -21,10 +21,10 @@ export default function App() {
       >
         ++
       </div>
-      <div onClick={() => setWidth((pre) => pre - 100)}>width</div>
-      <div onClick={() => setRate(!rate ? -50 : 0)}>rate</div>
+      <div onClick={() => setWidth(width === 2200 ? 400 : 2200)}>width</div>
+      <div onClick={() => setRate(!rate ? -550 : 0)}>rate</div>
 
-      <Marquee rate={rate} startOnScreen>
+      <Marquee key={1} rate={rate} startOnScreen>
         <div
           style={{
             display: 'flex',
@@ -35,36 +35,29 @@ export default function App() {
             style={{
               height: '60px',
               marginRight: '40px',
-              width: `${width}px`,
+              width: width + 'px',
               wordBreak: 'break-all',
               whiteSpace: 'wrap',
               textWrap: 'wrap',
             }}
           >
-            truong bkhn truongtruongtruongtruongtruongtruongtruongtruong truong
-            bkhn truongtruongtruongtruongtruongtruongtruongtruong truong bkhn
-            truongtruongtruongtruongtruongtruongtruongtruong
+            truong bkhn truongtruongtruongtruongtruongtruongtruongtruon truong
+            bkhn truongtruongtruongtruongtruongtruongtruongtruontruong bkhn
+            truongtruongtruongtruongtruongtruongtruongtruontruong bkhn
+            truongtruongtruongtruongtruongtruongtruongtruontruong bkhn
+            truongtruongtruongtruongtruongtruongtruongtruon
           </div>
           <div
             style={{
               height: '60px',
+             
               marginRight: '40px',
             }}
             contentEditable
-            onInput={(e) => {
-              setText(e.currentTarget.innerText);
-            }}
+          
+            onInput={(e) => setText(e.currentTarget.innerText)}
           >
             {text}
-          </div>
-          <div
-            style={{
-              height: '60px',
-              marginRight: '40px',
-              background: 'blue',
-            }}
-          >
-            60px
           </div>
         </div>
       </Marquee>

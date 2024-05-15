@@ -49,6 +49,20 @@
         return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
     };
 
+    function _toPrimitive(t, r) {
+      if ("object" != typeof t || !t) return t;
+      var e = t[Symbol.toPrimitive];
+      if (void 0 !== e) {
+        var i = e.call(t, r || "default");
+        if ("object" != typeof i) return i;
+        throw new TypeError("@@toPrimitive must return a primitive value.");
+      }
+      return ("string" === r ? String : Number)(t);
+    }
+    function _toPropertyKey(t) {
+      var i = _toPrimitive(t, "string");
+      return "symbol" == typeof i ? i : i + "";
+    }
     function _classCallCheck(instance, Constructor) {
       if (!(instance instanceof Constructor)) {
         throw new TypeError("Cannot call a class as a function");
@@ -96,20 +110,6 @@
     function _nonIterableSpread() {
       throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
     }
-    function _toPrimitive(input, hint) {
-      if (typeof input !== "object" || input === null) return input;
-      var prim = input[Symbol.toPrimitive];
-      if (prim !== undefined) {
-        var res = prim.call(input, hint || "default");
-        if (typeof res !== "object") return res;
-        throw new TypeError("@@toPrimitive must return a primitive value.");
-      }
-      return (hint === "string" ? String : Number)(input);
-    }
-    function _toPropertyKey(arg) {
-      var key = _toPrimitive(arg, "string");
-      return typeof key === "symbol" ? key : String(key);
-    }
 
     /**
      * A boundary represents everything below a given point in the call stack.
@@ -153,7 +153,7 @@
          *                      `retrieveException`.
          */
         function Boundary(_a) {
-            var onEnter = _a.onEnter, onExit = _a.onExit;
+            var _b = _a === void 0 ? {} : _a, onEnter = _b.onEnter, onExit = _b.onExit;
             this._execution = null;
             this.inBoundary = this.inBoundary.bind(this);
             this.enter = this.enter.bind(this);
@@ -276,9 +276,9 @@
           _this._height = size.blockSize;
           listeners.invoke();
         }) : null;
-        (_this$_observer = this._observer) === null || _this$_observer === void 0 ? void 0 : _this$_observer.observe($el);
+        (_this$_observer = this._observer) === null || _this$_observer === void 0 || _this$_observer.observe($el);
       }
-      _createClass(SizeWatcher, [{
+      return _createClass(SizeWatcher, [{
         key: "getWidth",
         value: function getWidth() {
           if (this._width !== null) return this._width;
@@ -302,11 +302,10 @@
         key: "tearDown",
         value: function tearDown() {
           var _this$_observer2;
-          (_this$_observer2 = this._observer) === null || _this$_observer2 === void 0 ? void 0 : _this$_observer2.disconnect();
+          (_this$_observer2 = this._observer) === null || _this$_observer2 === void 0 || _this$_observer2.disconnect();
           this._observer = null;
         }
       }]);
-      return SizeWatcher;
     }();
 
     var Item = /*#__PURE__*/function () {
@@ -339,7 +338,7 @@
         this._snapToNeighbor = snapToNeighbor;
         this._offset = null;
       }
-      _createClass(Item, [{
+      return _createClass(Item, [{
         key: "getSize",
         value: function getSize() {
           var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
@@ -392,7 +391,6 @@
           return this._snapToNeighbor;
         }
       }]);
-      return Item;
     }();
 
     var transitionDuration = 30000;
@@ -403,7 +401,7 @@
         this._direction = direction;
         this._transitionState = null;
       }
-      _createClass(Slider, [{
+      return _createClass(Slider, [{
         key: "setOffset",
         value: function setOffset(offset, rate, force) {
           var transitionState = this._transitionState;
@@ -440,7 +438,6 @@
           };
         }
       }]);
-      return Slider;
     }();
 
     function defer(fn) {
@@ -548,7 +545,7 @@
 
       // called when there's room for a new item.
       // You can return the item to append next
-      _createClass(Marquee, [{
+      return _createClass(Marquee, [{
         key: "onItemRequired",
         value: function onItemRequired(cb) {
           this._onItemRequired.push(cb);
@@ -610,6 +607,19 @@
             _this2._updateWindowInverseSize();
             _this2._cleanup();
           });
+        }
+      }, {
+        key: "updateUI",
+        value: function updateUI() {
+          console.log(' this._items', this._items);
+          // calculate what the new offsets should be given item sizes may have changed
+          this._items.reduce(function (newOffset, item) {
+            if (newOffset !== null) {
+              item.offset = newOffset;
+            }
+            item.item.setOffset(item.offset);
+            return item.offset + item.item.getSize();
+          }, null);
         }
       }, {
         key: "isWaitingForItem",
@@ -833,6 +843,15 @@
             var justReversedRate = _this7._justReversedRate;
             _this7._justReversedRate = false;
 
+            // calculate what the new offsets should be given item sizes may have changed
+            _this7._items.reduce(function (newOffset, item) {
+              if (newOffset !== null) {
+                item.offset = newOffset;
+              }
+              item.item.setOffset(item.offset);
+              return item.offset + item.item.getSize();
+            }, null);
+
             // remove items that are off screen
             _this7._items = _toConsumableArray(_this7._items).filter(function (_ref10) {
               var item = _ref10.item,
@@ -841,19 +860,6 @@
               if (!keep) _this7._removeItem(item);
               return keep;
             });
-
-            // calculate what the new offsets should be given item sizes may have changed
-            _this7._items.reduce(function (newOffset, item) {
-              if (newOffset !== null && (
-              // size of the item before has increased and would be overlapping
-              item.offset < newOffset ||
-              // this item is meant to always snap to the previous
-              item.item.getSnapToNeighbor())) {
-                item.offset = newOffset;
-              }
-              item.item.setOffset(item.offset);
-              return item.offset + item.item.getSize();
-            }, null);
             if (_this7._pendingItem) {
               _this7._$moving.appendChild(_this7._pendingItem.getContainer());
               if (_this7._lastEffectiveRate <= 0) {
@@ -942,7 +948,6 @@
           });
         }
       }]);
-      return Marquee;
     }();
 
     function createContainer() {
@@ -996,7 +1001,6 @@
             return React.createElement("div", null);
         return (React.createElement(MarqueeInternal, __assign({}, marqueeOpts, { filteredChildren: filteredChildren })));
     }
-    var started = false;
     var MarqueeInternal = React.memo(function (_a) {
         var filteredChildren = _a.filteredChildren, rate = _a.rate, upDown = _a.upDown, startOnScreen = _a.startOnScreen;
         var rateInitial = React.useState(rate)[0];
@@ -1090,7 +1094,6 @@
             };
             marqueeInstance.onItemRequired(function (_a) {
                 var touching = _a.touching;
-                console.log('onItemRequired', touching);
                 nextItemTouching.current = !!touching;
                 createPlaceholders(marqueeInstance.getGapSize());
             });
@@ -1141,9 +1144,6 @@
             }
         });
         React.useEffect(function () {
-            if (rate) {
-                started = true;
-            }
         }, [rate]);
         return (React.createElement(React.Fragment, null,
             React.createElement("div", { ref: setContainer, style: { all: 'unset', display: 'block', height: '100%' } }),
@@ -1155,12 +1155,6 @@
             }),
             marqueeInstance
                 ? filteredChildren.map(function (child, i) { return (React.createElement(WatchSize, { key: i, marqueeInstance: marqueeInstance, onChange: function (size) {
-                        console.log('startedstarted', started, size);
-                        // if (started) {
-                        //   marqueeInstance.clear();
-                        //   placeholders.current = [];
-                        //   setTriggerChangeSize({});
-                        // }
                         itemSizes.current[i] = size;
                     } }, child)); })
                 : null));
