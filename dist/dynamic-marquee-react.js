@@ -1144,13 +1144,14 @@
         });
         return (React.createElement(React.Fragment, null,
             React.createElement("div", { ref: setContainer, style: { all: 'unset', display: 'block', height: '100%' } }),
-            placeholders.current.map(function (placeholder) {
+            placeholders.current.map(function (placeholder, index) {
                 var $placeholder = placeholder.$placeholder, key = placeholder.key, childIndex = placeholder.childIndex;
                 placeholder.inDom = true;
                 var child = filteredChildren[childIndex];
                 return child
                     ? reactDom.createPortal(React.cloneElement(child, {
-                        index: childIndex,
+                        'marquee-item-index': index,
+                        'marquee-item-key': key,
                     }), $placeholder, key)
                     : null;
             }),

@@ -217,14 +217,15 @@ const MarqueeInternal = React.memo(
           style={{ all: 'unset', display: 'block', height: '100%' }}
         />
         {/* Create the portals, putting the new placeholders in the dom (if there are any) */}
-        {placeholders.current.map((placeholder) => {
+        {placeholders.current.map((placeholder, index) => {
           const { $placeholder, key, childIndex } = placeholder;
           placeholder.inDom = true;
           const child = filteredChildren[childIndex];
           return child
             ? createPortal(
                 React.cloneElement(child, {
-                  index: childIndex,
+                  'marquee-item-index': index,
+                  'marquee-item-key': key,
                 }),
                 $placeholder,
                 key,
