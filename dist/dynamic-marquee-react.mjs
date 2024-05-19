@@ -848,12 +848,11 @@ var Marquee$1 = /*#__PURE__*/function () {
           item.item.setOffset(item.offset);
           return item.offset + item.item.getSize();
         }, null);
-
         // remove items that are off screen
         _this7._items = _toConsumableArray(_this7._items).filter(function (_ref10) {
           var item = _ref10.item,
             offset = _ref10.offset;
-          var keep = _this7._lastEffectiveRate <= 0 ? offset + item.getSize() > _this7._windowOffset : offset < _this7._windowOffset + containerSize;
+          var keep = _this7._lastEffectiveRate <= 0 ? offset + item.getSize() > _this7._windowOffset : offset + item.getSize() > 0 || offset + item.getSize() < containerSize;
           if (!keep) _this7._removeItem(item);
           return keep;
         });
@@ -1003,10 +1002,10 @@ var MarqueeInternal = React.memo(function (_a) {
     var rateInitial = useState(rate)[0];
     var startOnScreenInitial = useState(startOnScreen)[0];
     var upDownInitial = useState(upDown)[0];
-    var _b = useState({}), changeSize = _b[0]; _b[1];
     var idGenerator = useState(IdGenerator())[0];
-    var _c = useState(null), setRenderTrigger = _c[1];
-    var _d = useState(null), $container = _d[0], setContainer = _d[1];
+    var _b = useState(null), setRenderTrigger = _b[1];
+    var _c = useState(null), $container = _c[0], setContainer = _c[1];
+    var _d = useState(null), isPause = _d[0]; _d[1];
     var placeholders = useRef([]);
     var nextChildIndex = useRef(0);
     var _e = useState(null), marqueeInstance = _e[0], setMarqueeInstance = _e[1];
@@ -1108,7 +1107,7 @@ var MarqueeInternal = React.memo(function (_a) {
         // Create the placeholder for the first item.
         // May actually be more than one item if the items are smaller than the buffer size.
         createPlaceholders(marqueeInstance.getGapSize());
-    }, [idGenerator, marqueeInstance, filteredChildren.length, changeSize]);
+    }, [idGenerator, marqueeInstance, filteredChildren.length, isPause]);
     useEffect(function () {
         if (!marqueeInstance || rate === undefined)
             return;
@@ -1140,15 +1139,17 @@ var MarqueeInternal = React.memo(function (_a) {
             });
         }
     });
-    useEffect(function () {
-    }, [rate]);
     return (React.createElement(React.Fragment, null,
         React.createElement("div", { ref: setContainer, style: { all: 'unset', display: 'block', height: '100%' } }),
         placeholders.current.map(function (placeholder) {
             var $placeholder = placeholder.$placeholder, key = placeholder.key, childIndex = placeholder.childIndex;
             placeholder.inDom = true;
             var child = filteredChildren[childIndex];
-            return child ? createPortal(child, $placeholder, key) : null;
+            return child
+                ? createPortal(React.cloneElement(child, {
+                    index: childIndex,
+                }), $placeholder, key)
+                : null;
         }),
         marqueeInstance
             ? filteredChildren.map(function (child, i) { return (React.createElement(WatchSize, { key: i, marqueeInstance: marqueeInstance, onChange: function (size) {

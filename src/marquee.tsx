@@ -1,5 +1,4 @@
-
-
+//@ts-ignore
 import { Marquee as MarqueeLib } from 'dynamic-marquee';
 import React, {
   ReactNode,
@@ -45,21 +44,21 @@ type Placeholder = {
   inDom: boolean;
   appended: boolean;
 };
-let started = false;
+
 const MarqueeInternal = React.memo(
   ({
     filteredChildren,
     rate,
     upDown,
     startOnScreen,
-  }: MarqueeOpts & { filteredChildren: ReactNode[] }) => {
+  }: MarqueeOpts & { filteredChildren: ReactNode[] & any[] }) => {
     const [rateInitial] = useState(rate);
     const [startOnScreenInitial] = useState(startOnScreen);
     const [upDownInitial] = useState(upDown);
-    const [changeSize, setTriggerChangeSize] = useState({});
     const [idGenerator] = useState(IdGenerator());
     const [, setRenderTrigger] = useState<object | null>(null);
     const [$container, setContainer] = useState<HTMLDivElement | null>(null);
+    const [isPause, setTriggerPause] = useState<object | null>(null);
     const placeholders = useRef<Placeholder[]>([]);
 
     const nextChildIndex = useRef(0);
@@ -154,12 +153,12 @@ const MarqueeInternal = React.memo(
         setRenderTrigger({});
       };
 
-      marqueeInstance.onItemRequired(({ touching }) => {
+      marqueeInstance.onItemRequired(({ touching }: any) => {
         nextItemTouching.current = !!touching;
         createPlaceholders(marqueeInstance.getGapSize());
       });
 
-      marqueeInstance.onItemRemoved(($el) => {
+      marqueeInstance.onItemRemoved(($el: any) => {
         // Remove the placeholder for the item that has just been removed from the marquee.
         placeholders.current = placeholders.current.filter(
           ({ $placeholder, key }) => {
@@ -176,7 +175,7 @@ const MarqueeInternal = React.memo(
       // May actually be more than one item if the items are smaller than the buffer size.
 
       createPlaceholders(marqueeInstance.getGapSize());
-    }, [idGenerator, marqueeInstance, filteredChildren.length, changeSize]);
+    }, [idGenerator, marqueeInstance, filteredChildren.length, isPause]);
 
     useEffect(() => {
       if (!marqueeInstance || rate === undefined) return;
@@ -211,12 +210,6 @@ const MarqueeInternal = React.memo(
       }
     });
 
-    useEffect(() => {
-      if (rate) {
-        started = true;
-      }
-    }, [rate]);
-    
     return (
       <React.Fragment>
         <div
@@ -228,7 +221,15 @@ const MarqueeInternal = React.memo(
           const { $placeholder, key, childIndex } = placeholder;
           placeholder.inDom = true;
           const child = filteredChildren[childIndex];
-          return child ? createPortal(child, $placeholder, key) : null;
+          return child
+            ? createPortal(
+                React.cloneElement(child, {
+                  index: childIndex,
+                }),
+                $placeholder,
+                key,
+              )
+            : null;
         })}
 
         {marqueeInstance
@@ -237,7 +238,6 @@ const MarqueeInternal = React.memo(
                 key={i}
                 marqueeInstance={marqueeInstance}
                 onChange={(size) => {
-               
                   itemSizes.current[i] = size;
                 }}
               >

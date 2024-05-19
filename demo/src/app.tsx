@@ -22,7 +22,7 @@ export default function App() {
         ++
       </div>
       <div onClick={() => setWidth(width === 2200 ? 400 : 2200)}>width</div>
-      <div onClick={() => setRate(!rate ? -550 : 0)}>rate</div>
+      <div onClick={() => setRate(!rate ? 550 : 0)}>rate</div>
 
       <Marquee key={1} rate={rate} startOnScreen>
         <div
@@ -50,11 +50,10 @@ export default function App() {
           <div
             style={{
               height: '60px',
-             
+
               marginRight: '40px',
             }}
             contentEditable
-          
             onInput={(e) => setText(e.currentTarget.innerText)}
           >
             {text}
