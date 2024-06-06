@@ -310,7 +310,8 @@ var Item = /*#__PURE__*/function () {
     var $el = _ref.$el,
       direction = _ref.direction,
       metadata = _ref.metadata,
-      snapToNeighbor = _ref.snapToNeighbor;
+      snapToNeighbor = _ref.snapToNeighbor,
+      fullWidth = _ref.fullWidth;
     _classCallCheck(this, Item);
     var $container = document.createElement('div');
     $container.style.all = 'unset';
@@ -318,7 +319,9 @@ var Item = /*#__PURE__*/function () {
     $container.style.opacity = '0';
     $container.style.pointerEvents = 'none';
     $container.style.position = 'absolute';
-    $container.style.width = '100%';
+    if (fullWidth) {
+      $container.style.width = '100%';
+    }
     if (direction === DIRECTION.RIGHT) {
       $container.style.whiteSpace = 'nowrap';
     } else {
@@ -479,7 +482,9 @@ var Marquee$1 = /*#__PURE__*/function () {
       _ref$upDown = _ref.upDown,
       upDown = _ref$upDown === void 0 ? false : _ref$upDown,
       _ref$startOnScreen = _ref.startOnScreen,
-      startOnScreen = _ref$startOnScreen === void 0 ? false : _ref$startOnScreen;
+      startOnScreen = _ref$startOnScreen === void 0 ? false : _ref$startOnScreen,
+      _ref$fullWidth = _ref.fullWidth,
+      fullWidth = _ref$fullWidth === void 0 ? false : _ref$fullWidth;
     _classCallCheck(this, Marquee);
     this._boundary = new Boundary({
       onEnter: function onEnter() {
@@ -528,6 +533,7 @@ var Marquee$1 = /*#__PURE__*/function () {
       return _this._tickOnRaf();
     });
     this.windowInverseSize = null;
+    this.fullWidth = fullWidth;
     this._updateWindowInverseSize();
     var $moving = document.createElement('div');
     this._$moving = $moving;
@@ -630,7 +636,8 @@ var Marquee$1 = /*#__PURE__*/function () {
       var $el = toDomEl(elOrString);
       var item = new Item({
         $el: $el,
-        direction: this._direction
+        direction: this._direction,
+        fullWidth: this.fullWidth
       });
       this._$window.appendChild(item.getContainer());
       return {
@@ -672,7 +679,8 @@ var Marquee$1 = /*#__PURE__*/function () {
           $el: $el,
           direction: _this3._direction,
           metadata: metadata,
-          snapToNeighbor: resolvedSnap
+          snapToNeighbor: resolvedSnap,
+          fullWidth: _this3.fullWidth
         });
         _this3._pendingItem.onSizeChange(function () {
           return _this3._tickOnRaf();
@@ -999,7 +1007,7 @@ function Marquee(_a) {
     return (React.createElement(MarqueeInternal, __assign({}, marqueeOpts, { filteredChildren: filteredChildren })));
 }
 var MarqueeInternal = React.memo(function (_a) {
-    var filteredChildren = _a.filteredChildren, rate = _a.rate, upDown = _a.upDown, startOnScreen = _a.startOnScreen;
+    var filteredChildren = _a.filteredChildren, rate = _a.rate, upDown = _a.upDown, startOnScreen = _a.startOnScreen, fullWidth = _a.fullWidth;
     var rateInitial = useState(rate)[0];
     var startOnScreenInitial = useState(startOnScreen)[0];
     var upDownInitial = useState(upDown)[0];
@@ -1027,6 +1035,7 @@ var MarqueeInternal = React.memo(function (_a) {
             upDown: upDownInitial,
             startOnScreen: startOnScreenInitial,
             rate: rateInitial,
+            fullWidth: fullWidth,
         });
         setMarqueeInstance(marquee);
         return function () { return marquee.clear(); };
@@ -1036,6 +1045,7 @@ var MarqueeInternal = React.memo(function (_a) {
         setMarqueeInstance,
         startOnScreenInitial,
         upDownInitial,
+        fullWidth,
     ]);
     useEffect(function () {
         if (!marqueeInstance)

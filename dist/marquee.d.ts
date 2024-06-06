@@ -7,5 +7,6 @@ export type MarqueeOpts = {
      */
     upDown?: boolean;
     startOnScreen?: boolean;
+    fullWidth?: boolean;
 };
 export declare function Marquee({ children, ...marqueeOpts }: PropsWithChildren<MarqueeOpts>): React.JSX.Element;

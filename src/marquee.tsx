@@ -23,6 +23,7 @@ export type MarqueeOpts = {
   upDown?: boolean;
   /* Start with the marquee full of items. */
   startOnScreen?: boolean;
+  fullWidth?: boolean;
 };
 
 export function Marquee({
@@ -51,6 +52,7 @@ const MarqueeInternal = React.memo(
     rate,
     upDown,
     startOnScreen,
+    fullWidth,
   }: MarqueeOpts & { filteredChildren: ReactNode[] & any[] }) => {
     const [rateInitial] = useState(rate);
     const [startOnScreenInitial] = useState(startOnScreen);
@@ -84,6 +86,7 @@ const MarqueeInternal = React.memo(
         upDown: upDownInitial,
         startOnScreen: startOnScreenInitial,
         rate: rateInitial,
+        fullWidth,
       });
       setMarqueeInstance(marquee);
 
@@ -94,6 +97,7 @@ const MarqueeInternal = React.memo(
       setMarqueeInstance,
       startOnScreenInitial,
       upDownInitial,
+      fullWidth,
     ]);
 
     useEffect(() => {
