@@ -87,6 +87,7 @@ const MarqueeInternal = React.memo(
         startOnScreen: startOnScreenInitial,
         rate: rateInitial,
         fullWidth,
+        isLazyFullWidth: true,
       });
       setMarqueeInstance(marquee);
 

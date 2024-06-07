@@ -550,7 +550,7 @@ doctrine@^3.0.0:
 
 "dynamic-marquee@git+https://github.com/truongnc1/dynamic-marquee.git":
   version "2.6.3"
-  resolved "git+https://github.com/truongnc1/dynamic-marquee.git#5eeb1680f5e82049aeb1ec9f6d3e2c94ba3f2255"
+  resolved "git+https://github.com/truongnc1/dynamic-marquee.git#c27b063fb030922472615c164c987da375eaf85b"
 
 es-abstract@^1.22.1, es-abstract@^1.22.3, es-abstract@^1.23.0, es-abstract@^1.23.1, es-abstract@^1.23.2, es-abstract@^1.23.3:
   version "1.23.3"
