@@ -1,5 +1,5 @@
 {
-  "name": "dynamic-marquee-react",
+  "name": "@gem-sdk/dynamic-marquee-react",
   "version": "1.0.3",
   "description": "A `<Marquee />` component for React.",
   "main": "./dist/dynamic-marquee-react.js",
