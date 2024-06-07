@@ -1019,7 +1019,7 @@ function Marquee(_a) {
     return (React.createElement(MarqueeInternal, __assign({}, marqueeOpts, { filteredChildren: filteredChildren })));
 }
 var MarqueeInternal = React.memo(function (_a) {
-    var filteredChildren = _a.filteredChildren, rate = _a.rate, upDown = _a.upDown, startOnScreen = _a.startOnScreen, fullWidth = _a.fullWidth;
+    var filteredChildren = _a.filteredChildren, rate = _a.rate, upDown = _a.upDown, startOnScreen = _a.startOnScreen, fullWidth = _a.fullWidth, isLazyFullWidth = _a.isLazyFullWidth;
     var rateInitial = useState(rate)[0];
     var startOnScreenInitial = useState(startOnScreen)[0];
     var upDownInitial = useState(upDown)[0];
@@ -1048,7 +1048,7 @@ var MarqueeInternal = React.memo(function (_a) {
             startOnScreen: startOnScreenInitial,
             rate: rateInitial,
             fullWidth: fullWidth,
-            isLazyFullWidth: true,
+            isLazyFullWidth: isLazyFullWidth,
         });
         setMarqueeInstance(marquee);
         return function () { return marquee.clear(); };
@@ -1059,6 +1059,7 @@ var MarqueeInternal = React.memo(function (_a) {
         startOnScreenInitial,
         upDownInitial,
         fullWidth,
+        isLazyFullWidth,
     ]);
     useEffect(function () {
         if (!marqueeInstance)
